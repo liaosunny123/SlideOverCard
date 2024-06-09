@@ -1,10 +1,3 @@
-//
-//  SOCManager.swift
-//  
-//
-//  Created by João Gabriel Pozzobon dos Santos on 24/04/21.
-//
-
 import SwiftUI
 import Combine
 
@@ -80,10 +73,12 @@ internal class SOCManager<Content: View, Style: ShapeStyle>: ObservableObject {
     /// Dismisses a `SlideOverCard`
     @available(iOSApplicationExtension, unavailable)
     func dismiss() {
-        onDismiss?()
-        self.model.showCard = false
-        DispatchQueue.main.asyncAfter(deadline: .now()+0.5) { [weak self] in
-            self?.cardController?.dismiss(animated: false)
+        if self.model.showCard {
+            onDismiss?()
+            self.model.showCard = false
+            DispatchQueue.main.asyncAfter(deadline: .now()+0.5) { [weak self] in
+                self?.cardController?.dismiss(animated: false)
+            }
         }
     }
     
