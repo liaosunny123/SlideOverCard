@@ -73,6 +73,8 @@ internal class SOCManager<Content: View, Style: ShapeStyle>: ObservableObject {
     /// Dismisses a `SlideOverCard`
     @available(iOSApplicationExtension, unavailable)
     func dismiss() {
+        self.model.showCard = false
+        
         if self.model.showCard {
             onDismiss?()
             self.model.showCard = false
