@@ -1,3 +1,7 @@
+import SwiftUI
+import Combine
+
+
 internal struct SOCModifier<ViewContent: View, Style: ShapeStyle>: ViewModifier {
     var model: SOCModel
     @Binding var isPresented: Bool
