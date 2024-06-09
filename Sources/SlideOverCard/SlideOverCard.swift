@@ -1,20 +1,13 @@
-//
-//  SlideOverCard.swift
-//
-//
-//  Created by João Gabriel Pozzobon dos Santos on 30/10/20.
-//
-
 import SwiftUI
 
 /// A view that displays a card that slides over from the bottom of the screen
 internal struct SlideOverCard<Content: View, Style: ShapeStyle>: View {
     @ObservedObject var model: SOCModel
-    
+
     var options: SOCOptions
     let style: SOCStyle<Style>
     let content: Content
-    
+
     init(model: ObservedObject<SOCModel>,
                 options: SOCOptions = [],
                 style: SOCStyle<Style> = SOCStyle(),
@@ -24,13 +17,13 @@ internal struct SlideOverCard<Content: View, Style: ShapeStyle>: View {
         self.style = style
         self.content = content()
     }
-    
+
     @State private var viewOffset: CGFloat = 0.0
-    
+
     private var isiPad: Bool {
         UIDevice.current.userInterfaceIdiom == .pad
     }
-    
+
     public var body: some View {
         ZStack {
             if model.showCard {
@@ -45,7 +38,7 @@ internal struct SlideOverCard<Content: View, Style: ShapeStyle>: View {
                         }
                     }
             }
-                
+
             if model.showCard {
                 Group {
                     if #available(iOS 14.0, *) {
@@ -65,11 +58,11 @@ internal struct SlideOverCard<Content: View, Style: ShapeStyle>: View {
         }
         .animation(.defaultSpring, value: model.showCard)
     }
-    
+
     private var container: some View {
         VStack {
             Spacer()
-            
+
             if isiPad {
                 card
                     .aspectRatio(1.0, contentMode: .fit)
@@ -79,11 +72,11 @@ internal struct SlideOverCard<Content: View, Style: ShapeStyle>: View {
             }
         }
     }
-    
+
     private var cardShape: some Shape {
         RoundedRectangle(cornerSize: style.cornerRadii, style: .continuous)
     }
-    
+
     private var card: some View {
         VStack(alignment: .trailing, spacing: 0) {
             if !options.contains(.hideDismissButton) {
@@ -92,7 +85,7 @@ internal struct SlideOverCard<Content: View, Style: ShapeStyle>: View {
                 }
                 .frame(width: 24, height: 24)
             }
-            
+
             HStack {
                 Spacer()
                 content
@@ -103,7 +96,7 @@ internal struct SlideOverCard<Content: View, Style: ShapeStyle>: View {
         .padding(style.innerPadding)
         .background(Rectangle().fill(style.style))
         .clipShape(cardShape)
-        .offset(x: 0, y: viewOffset/pow(2, abs(viewOffset)/500+1))
+        .offset(x: 0, y: viewOffset / pow(2, abs(viewOffset) / 500 + 1))
         .padding(style.outerPadding)
         .gesture(
             options.contains(.disableDrag) ? nil :
@@ -122,7 +115,7 @@ internal struct SlideOverCard<Content: View, Style: ShapeStyle>: View {
                     }
         )
     }
-    
+
     func dismiss() {
         model.showCard = false
     }
