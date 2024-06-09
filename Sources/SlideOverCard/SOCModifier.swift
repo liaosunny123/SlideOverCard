@@ -1,7 +1,15 @@
+//
+//  SOCModel.swift
+//
+//
+//  Created by João Gabriel Pozzobon dos Santos on 19/03/24.
+//
+
 import SwiftUI
 import Combine
 
-@available(iOS 14.0, *)
+/// A data model shared  between `SOCModifier`, `SOCManager` and `SlideOverCard`, containing the state of the card
+
 internal struct SOCModifier<ViewContent: View, Style: ShapeStyle>: ViewModifier {
     var model: SOCModel
     @Binding var isPresented: Bool
@@ -24,8 +32,6 @@ internal struct SOCModifier<ViewContent: View, Style: ShapeStyle>: ViewModifier 
                              options: options,
                              style: style,
                              content: content)
-        
-        self.model.showCard = isPresented.wrappedValue
     }
     
     func body(content: Content) -> some View {
@@ -43,11 +49,6 @@ internal struct SOCModifier<ViewContent: View, Style: ShapeStyle>: ViewModifier 
                     manager.present()
                 } else {
                     manager.dismiss()
-                }
-            }
-            .onChange(of: isPresented) { value in
-                if value != model.showCard {
-                    model.showCard = value
                 }
             }
             .background(windowAccessor)
