@@ -1,7 +1,7 @@
 import SwiftUI
 import Combine
 
-/// A manager class that presents a `SlideOverCard`overlay from anywhere in an app
+/// A manager class that presents a `SlideOverCard` overlay from anywhere in an app
 internal class SOCManager<Content: View, Style: ShapeStyle>: ObservableObject {
     @ObservedObject var model: SOCModel
     
@@ -35,7 +35,7 @@ internal class SOCManager<Content: View, Style: ShapeStyle>: ObservableObject {
             .removeDuplicates()
             .sink { [weak self] value in
                 if !value {
-                    self?.dismiss()
+                    self?.dismissInternal()
                 }
             }
             .store(in: &cancellables)
@@ -76,9 +76,12 @@ internal class SOCManager<Content: View, Style: ShapeStyle>: ObservableObject {
         if self.model.showCard {
             onDismiss?()
             self.model.showCard = false
-            DispatchQueue.main.asyncAfter(deadline: .now()+0.5) { [weak self] in
-                self?.cardController?.dismiss(animated: false)
-            }
+        }
+    }
+    
+    private func dismissInternal() {
+        DispatchQueue.main.asyncAfter(deadline: .now()+0.5) { [weak self] in
+            self?.cardController?.dismiss(animated: false)
         }
     }
     

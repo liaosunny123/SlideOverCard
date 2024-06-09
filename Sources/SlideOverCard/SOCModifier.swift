@@ -1,14 +1,3 @@
-//
-//  SOCModifier.swift
-//  
-//
-//  Created by João Gabriel Pozzobon dos Santos on 18/03/24.
-//
-
-import SwiftUI
-import Combine
-
-/// A view modifier that presents a `SlideOverCard` over a `View`'s hierarchy through a `SOCManager` based on a `Binding` value
 internal struct SOCModifier<ViewContent: View, Style: ShapeStyle>: ViewModifier {
     var model: SOCModel
     @Binding var isPresented: Bool
@@ -39,7 +28,9 @@ internal struct SOCModifier<ViewContent: View, Style: ShapeStyle>: ViewModifier 
                 manager.set(colorScheme: value)
             }
             .onReceive(model.$showCard.receive(on: RunLoop.main)) { value in
-                isPresented = value
+                if value != isPresented {
+                    isPresented = value
+                }
             }
             .onReceive(Just(isPresented)) { value in
                 if value {
