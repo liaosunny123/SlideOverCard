@@ -1,7 +1,7 @@
 import SwiftUI
 import Combine
 
-
+@available(iOS 14.0, *)
 internal struct SOCModifier<ViewContent: View, Style: ShapeStyle>: ViewModifier {
     var model: SOCModel
     @Binding var isPresented: Bool
@@ -24,6 +24,8 @@ internal struct SOCModifier<ViewContent: View, Style: ShapeStyle>: ViewModifier 
                              options: options,
                              style: style,
                              content: content)
+        
+        self.model.showCard = isPresented.wrappedValue
     }
     
     func body(content: Content) -> some View {
@@ -41,6 +43,11 @@ internal struct SOCModifier<ViewContent: View, Style: ShapeStyle>: ViewModifier 
                     manager.present()
                 } else {
                     manager.dismiss()
+                }
+            }
+            .onChange(of: isPresented) { value in
+                if value != model.showCard {
+                    model.showCard = value
                 }
             }
             .background(windowAccessor)
